@@ -2,6 +2,8 @@ package org.application.security.service.impl;
 
 import lombok.AllArgsConstructor;
 import org.application.security.service.AuthentificationService;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,6 +24,15 @@ public class AuthentificationServiceImpl implements AuthentificationService {
     private final JwtEncoder jwtEncoder;
     private final JwtDecoder jwtDeccoder;
     private final UserDetailsService userDetailsService;
+    private final AuthenticationManager authenticationManager;
+
+
+    public Map<String, String> authentifier(String username, String password) {
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        String accessToken = genererAccessToken(authentication);
+        String refreshToken = genrerRefreshToken(authentication);
+        return Map.of("accessToken", accessToken, "refreshToken", refreshToken);
+    }
 
     @Override
     public String genererAccessToken(Authentication authentication) {

@@ -5,13 +5,10 @@ import org.application.security.service.AuthentificationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -24,14 +21,11 @@ import java.util.stream.Collectors;
 public class AuthenticationController {
 
     private final AuthentificationService authentificationService;
-    private final JwtDecoder jwtDecoder;
 
     @PostMapping("/auth")
-    public Map<String, Object> authentification(Authentication authentication) {
-        return Map.of(
-                "accessToken", authentificationService.genererAccessToken(authentication),
-                "refreshToken", authentificationService.genrerRefreshToken(authentication)
-        );
+    public ResponseEntity<Map<String, String>> authentification(@RequestParam String username, @RequestParam String password) {
+        Map<String, String> response = authentificationService.authentifier(username, password);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/refresh")

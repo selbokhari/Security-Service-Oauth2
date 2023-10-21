@@ -2,7 +2,11 @@ package org.application.security.service;
 
 import org.springframework.security.core.Authentication;
 
+import java.util.Map;
+
 public interface AuthentificationService {
+
+    Map<String, String> authentifier(String username,String password);
 
     String genererAccessToken(Authentication authentication);
 
