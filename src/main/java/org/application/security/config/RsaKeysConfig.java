@@ -1,4 +1,4 @@
-package org.sid.securityservice.config.security;
+package org.application.security.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

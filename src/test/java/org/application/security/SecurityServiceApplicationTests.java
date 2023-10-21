@@ -1,4 +1,4 @@
-package org.sid.securityservice;
+package org.application.security;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

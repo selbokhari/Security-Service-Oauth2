@@ -1,4 +1,4 @@
-package org.sid.securityservice.config.security;
+package org.application.security.config;
 
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
@@ -7,6 +7,7 @@ import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import lombok.AllArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -34,8 +35,10 @@ public class SecurityConfig {
 
     RsaKeysConfig rsaKeysConfig;
     PasswordEncoder passwordEncoder;
+    UserDetailsServiceImpl userDetailsServiceImpl;
 
     @Bean
+    @ConditionalOnProperty(name = "in.memory.auth", havingValue = "true")
     public UserDetailsService creerUtilisateur() { // on peut aussi retourner InMemoryUserDetailsManager implements UserDetailsService
         return new InMemoryUserDetailsManager(
                 User.withUsername("user1").password(passwordEncoder.encode("123")).authorities("USER").build(),
@@ -48,9 +51,11 @@ public class SecurityConfig {
     public SecurityFilterChain creerFilterSecurite(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth.antMatchers("/auth**").permitAll())
                 .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
+                .userDetailsService(userDetailsServiceImpl)
                 .httpBasic(Customizer.withDefaults())
                 .build();
     }
