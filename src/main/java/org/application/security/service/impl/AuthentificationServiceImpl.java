@@ -59,7 +59,6 @@ public class AuthentificationServiceImpl implements AuthentificationService {
         return genererToken(username, authrites, instant, expriresIn, false);
     }
 
-
     private String genererToken(Authentication authentication, Instant instant, Instant expriresIn, boolean isRefresh) {
         String authorites = authentication.getAuthorities().stream().map(auth -> auth.getAuthority()).collect(Collectors.joining(" "));
         return genererToken(authentication.getName(), authorites, instant, expriresIn, isRefresh);
