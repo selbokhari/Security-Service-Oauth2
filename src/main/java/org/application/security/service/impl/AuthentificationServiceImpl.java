@@ -44,7 +44,7 @@ public class AuthentificationServiceImpl implements AuthentificationService {
         String username = decodedJwt.getSubject();
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         String authrites = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(" "));
-        return genererToken(username, authrites, instant, expriresIn, true);
+        return genererToken(username, authrites, instant, expriresIn, false);
     }
 
 
