@@ -8,4 +8,6 @@ public interface AuthentificationService {
 
     String genrerRefreshToken(Authentication authentication);
 
+    String genrerRefreshDepuisAccessToken(String refreshToken);
+
 }

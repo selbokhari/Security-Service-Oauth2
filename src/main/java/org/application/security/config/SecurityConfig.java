@@ -51,7 +51,7 @@ public class SecurityConfig {
     public SecurityFilterChain creerFilterSecurite(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth.antMatchers("/auth**").permitAll())
+                .authorizeHttpRequests(auth -> auth.antMatchers("/auth**", "/refresh**").permitAll())
                 .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
