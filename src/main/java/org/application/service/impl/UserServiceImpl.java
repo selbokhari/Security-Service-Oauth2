@@ -7,6 +7,8 @@ import org.application.repositories.UserRepository;
 import org.application.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -36,6 +38,8 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUsername(login);
     }
 
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public void supprimerUtilisateur(Long id) {
         userRepository.findById(id)
                 .ifPresent(userRepository::delete);

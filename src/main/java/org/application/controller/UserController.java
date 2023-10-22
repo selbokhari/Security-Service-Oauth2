@@ -3,6 +3,7 @@ package org.application.controller;
 import org.application.dto.UserDto;
 import org.application.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,21 +16,22 @@ public class UserController {
 
     @GetMapping("/{userId}")
     @PreAuthorize("hasAnyAuthority('SCOPE_USER')")
-    public UserDto recupererUtilisateurParId( @PathVariable(name = "userId") Long id) {
-        return userService.recupererUtilisateurParId(id);
+    public ResponseEntity<UserDto> recupererUtilisateurParId(@PathVariable(name = "userId") Long id) {
+        return ResponseEntity.ok(userService.recupererUtilisateurParId(id));
     }
 
     @DeleteMapping("/{userId}")
     @PreAuthorize("hasAnyAuthority('SCOPE_ADMIN')")
-    public UserDto supprimerUtilisateur( @PathVariable(name = "userId") Long id) {
-        return userService.recupererUtilisateurParId(id);
+    public ResponseEntity<Void> supprimerUtilisateur(@PathVariable(name = "userId") Long id) {
+        userService.supprimerUtilisateur(id);
+        return ResponseEntity.ok().build();
     }
 
 
     @PostMapping
     @PreAuthorize("hasAnyAuthority('SCOPE_ADMIN')")
-    public UserDto creerUtilisateur(@RequestBody UserDto userDto) {
-        return userService.creerUtilisateur(userDto);
+    public ResponseEntity<UserDto> creerUtilisateur(@RequestBody UserDto userDto) {
+        return ResponseEntity.ok(userService.creerUtilisateur(userDto));
     }
 
 }
