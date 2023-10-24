@@ -11,6 +11,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -37,7 +39,7 @@ public class SecurityConfig {
 
     RsaKeysConfig rsaKeysConfig;
     PasswordEncoder passwordEncoder;
-    UserDetailsServiceImpl userDetailsServiceImpl;
+    UserDetailsServiceImpl userDetailsService;
 
     @Bean
     @ConditionalOnProperty(name = "in.memory.auth", havingValue = "true")
@@ -53,18 +55,22 @@ public class SecurityConfig {
     public SecurityFilterChain creerFilterSecurite(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .csrf(csrf -> csrf.disable())
+                .headers(headers -> headers.frameOptions().sameOrigin()) // pour authoriser l'iframe h2-console.
+                .authorizeHttpRequests(auth -> auth.antMatchers("/h2-console/**").hasAuthority("SCOPE_ADMIN"))
                 .authorizeHttpRequests(auth -> auth.antMatchers("/auth**", "/refresh**").permitAll())
                 .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
-                .userDetailsService(userDetailsServiceImpl)
                 .httpBasic(Customizer.withDefaults())
                 .build();
     }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfiguration) throws Exception {
-        return authConfiguration.getAuthenticationManager();
+        var authProvider = new DaoAuthenticationProvider();
+        authProvider.setPasswordEncoder(passwordEncoder);
+        authProvider.setUserDetailsService(userDetailsService);
+        return new ProviderManager(authProvider);
     }
 
     @Bean

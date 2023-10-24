@@ -8,6 +8,8 @@ import org.application.service.RoleService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
+
 
 @AllArgsConstructor
 @Service
@@ -16,9 +18,10 @@ public class RoleServiceImpl implements RoleService {
     private final RoleRepository roleRepository;
 
     @Override
-    public RoleEntite creerRole(RoleDto roleDto) {
+    public RoleDto creerRole(RoleDto roleDto) {
         RoleEntite roleEntite = RoleMapper.mapToRoleEntite(roleDto);
-        return roleRepository.save(roleEntite);
+        RoleEntite roleCree = roleRepository.save(roleEntite);
+        return RoleMapper.mapToRoleDto(roleCree);
     }
 
     @Override
@@ -26,6 +29,11 @@ public class RoleServiceImpl implements RoleService {
         return roleRepository.findById(roleId)
                 .map(RoleMapper::mapToRoleDto)
                 .orElse(null);
+    }
+
+    @Override
+    public Set<RoleEntite> recupererRolesParNoms(Set<String> nomRoles) {
+        return roleRepository.findByNomIn(nomRoles);
     }
 
 }

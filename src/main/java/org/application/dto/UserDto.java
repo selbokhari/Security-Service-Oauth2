@@ -6,7 +6,7 @@ import lombok.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import java.util.Set;
 
 
 @Data
@@ -25,6 +25,6 @@ public class UserDto {
     private String email;
 
     @NotEmpty
-    List<RoleDto> roles;
+    Set<RoleDto> roles;
 
 }

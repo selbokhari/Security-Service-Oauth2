@@ -4,8 +4,8 @@ import org.application.dto.RoleDto;
 import org.application.entities.RoleEntite;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class RoleMapper {
@@ -23,16 +23,16 @@ public class RoleMapper {
                 .build();
     }
 
-    public static List<RoleDto> mapToListRoleDto(List<RoleEntite> roleEntites) {
+    public static Set<RoleDto> mapToListRoleDto(Set<RoleEntite> roleEntites) {
         return Optional.ofNullable(roleEntites)
-                .map(roles -> roles.stream().map(RoleMapper::mapToRoleDto).collect(Collectors.toList()))
-                .orElse(Collections.emptyList());
+                .map(roles -> roles.stream().map(RoleMapper::mapToRoleDto).collect(Collectors.toSet()))
+                .orElse(Collections.emptySet());
     }
 
-    public static List<RoleEntite> mapToListRoleEntite(List<RoleDto> roleDtos) {
+    public static Set<RoleEntite> mapToListRoleEntite(Set<RoleDto> roleDtos) {
         return Optional.ofNullable(roleDtos)
-                .map(roles -> roles.stream().map(RoleMapper::mapToRoleEntite).collect(Collectors.toList()))
-                .orElse(Collections.emptyList());
+                .map(roles -> roles.stream().map(RoleMapper::mapToRoleEntite).collect(Collectors.toSet()))
+                .orElse(Collections.emptySet());
     }
 
 }

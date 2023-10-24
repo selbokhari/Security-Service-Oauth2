@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.List;
+import java.util.Set;
 
 @EnableConfigurationProperties(RsaKeysConfig.class)
 @SpringBootApplication
@@ -30,37 +30,42 @@ public class SecurityServiceApplication {
 
 
     @Bean
-    public CommandLineRunner init(RoleService roleServiceImpl, UserService userService, PasswordEncoder passwordEncoder) {
+    public CommandLineRunner init(RoleService roleService, UserService userService, PasswordEncoder passwordEncoder) {
         return args -> {
+            // création des roles
             RoleDto userRole = RoleDto.builder()
+                    .roleId(1l)
                     .nom("USER")
                     .build();
 
             RoleDto adminRole = RoleDto.builder()
+                    .roleId(2l)
                     .nom("ADMIN")
                     .build();
 
-            roleServiceImpl.creerRole(userRole);
-            roleServiceImpl.creerRole(adminRole);
+            RoleDto userRoleDto = roleService.creerRole(userRole);
+            RoleDto adminRoleDto = roleService.creerRole(adminRole);
 
-            // création des utilisateurs
-
+            // création d'utilisateur
             UserDto user = UserDto.builder()
                     .username("user")
                     .email("user@gmail.com")
                     .password(passwordEncoder.encode("user"))
-                    .roles(List.of(userRole))
                     .build();
 
+            // création d'admin
             UserDto admin = UserDto.builder()
                     .username("admin")
-                    .roles(List.of(userRole, adminRole))
                     .email("admin@gmail.com")
                     .password(passwordEncoder.encode("admin"))
                     .build();
 
-            userService.creerUtilisateur(user);
-            userService.creerUtilisateur(admin);
+            UserDto userDto = userService.creerUtilisateur(user);
+            UserDto adminDto = userService.creerUtilisateur(admin);
+
+            // attacher les roles aux utilisateurs
+            userService.affecterRolesUtilisateur( adminDto.getUserId(),Set.of(userRoleDto, adminRoleDto));
+            userService.affecterRolesUtilisateur( userDto.getUserId(),Set.of(userRoleDto));
         };
     }
 
