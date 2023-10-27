@@ -19,7 +19,7 @@ public class UserRepositoryTest {
 
 
     @Test
-    @DisplayName("Tester la recuperation d'un utilisateur par son login")
+    @DisplayName("Tester la persistance d'un utilisateur")
     public void saveUserEntiteTest() {
 
         // init: enregistrer un utilisateur pour effectuer le test => déjà faite sur @BeforeEach
