@@ -1,7 +1,7 @@
-package org.application.security.config;
+package org.application.config;
 
 import org.application.entities.RoleEntite;
-import org.application.entities.UserEntite;
+import org.application.entities.UtilisateurEntite;
 import org.application.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.User;
@@ -18,10 +18,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntite userEntite = userService.loadUserByUsername(username);
+        UtilisateurEntite userEntite = userService.loadUserByUsername(username);
         String[] roles = userEntite.getRoles().stream().map(RoleEntite::getNom).toArray(String[]::new);
         return User.builder()
-                .username(userEntite.getUsername())
+                .username(userEntite.getLogin())
                 .password(userEntite.getPassword())
                 .authorities(roles)
                 .build();

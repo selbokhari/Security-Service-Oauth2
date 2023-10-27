@@ -1,7 +1,7 @@
 package org.application.controller;
 
 import lombok.AllArgsConstructor;
-import org.application.security.service.AuthentificationService;
+import org.application.service.AuthentificationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

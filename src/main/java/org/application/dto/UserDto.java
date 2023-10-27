@@ -16,7 +16,11 @@ public class UserDto {
     @NotNull
     private Long userId;
 
-    private String username;
+    private String prenom;
+
+    private String nom;
+
+    private String login;
 
     @JsonIgnore
     private String password;

@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 import java.util.Set;
 
 
-@AllArgsConstructor
 @Service
+@AllArgsConstructor
 public class RoleServiceImpl implements RoleService {
 
     private final RoleRepository roleRepository;

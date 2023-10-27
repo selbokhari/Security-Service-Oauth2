@@ -2,7 +2,7 @@ package org.application;
 
 import org.application.dto.RoleDto;
 import org.application.dto.UserDto;
-import org.application.security.config.RsaKeysConfig;
+import org.application.config.RsaKeysConfig;
 import org.application.service.RoleService;
 import org.application.service.UserService;
 import org.springframework.boot.CommandLineRunner;
@@ -10,13 +10,16 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Set;
 
-@EnableConfigurationProperties(RsaKeysConfig.class)
+@EnableJpaAuditing
 @SpringBootApplication
+@EnableConfigurationProperties(RsaKeysConfig.class)
 public class SecurityServiceApplication {
 
     public static void main(String[] args) {
@@ -30,6 +33,7 @@ public class SecurityServiceApplication {
 
 
     @Bean
+    @Profile("!test")
     public CommandLineRunner init(RoleService roleService, UserService userService, PasswordEncoder passwordEncoder) {
         return args -> {
             // création des roles
@@ -48,14 +52,18 @@ public class SecurityServiceApplication {
 
             // création d'utilisateur
             UserDto user = UserDto.builder()
-                    .username("user")
+                    .nom("nom01")
+                    .prenom("prenom01")
+                    .login("user")
                     .email("user@gmail.com")
                     .password(passwordEncoder.encode("user"))
                     .build();
 
             // création d'admin
             UserDto admin = UserDto.builder()
-                    .username("admin")
+                    .prenom("prenom02")
+                    .nom("nom02")
+                    .login("admin")
                     .email("admin@gmail.com")
                     .password(passwordEncoder.encode("admin"))
                     .build();

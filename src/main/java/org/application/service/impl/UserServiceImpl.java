@@ -3,7 +3,7 @@ package org.application.service.impl;
 import org.application.dto.RoleDto;
 import org.application.dto.UserDto;
 import org.application.entities.RoleEntite;
-import org.application.entities.UserEntite;
+import org.application.entities.UtilisateurEntite;
 import org.application.exception.BusinessException.Raison;
 import org.application.exception.BusinessException;
 import org.application.mapper.UserEntiteMapper;
@@ -19,8 +19,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@AllArgsConstructor
 @Service
+@AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void affecterRolesUtilisateur(Long id, Set<RoleDto> roles) {
-        UserEntite utilisateur = userRepository.findById(id).orElseThrow(() -> new BusinessException(Raison.UTILISATEUR_NON_TROUVEE));
+        UtilisateurEntite utilisateur = userRepository.findById(id).orElseThrow(() -> new BusinessException(Raison.UTILISATEUR_NON_TROUVEE));
         Set<String> nomeRoles = roles.stream().map(RoleDto::getNom).collect(Collectors.toSet());
         Set<RoleEntite> rolesEntites =  roleService.recupererRolesParNoms(nomeRoles);
         utilisateur.getRoles().addAll(rolesEntites);
@@ -59,8 +59,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserEntite recupererUtilisateurParLogin(String login) {
-        return userRepository.findByUsername(login);
+    public UtilisateurEntite recupererUtilisateurParLogin(String login) {
+        return userRepository.findByLogin(login);
     }
 
     @Override
@@ -70,8 +70,8 @@ public class UserServiceImpl implements UserService {
                 .ifPresent(userRepository::delete);
     }
 
-    public UserEntite loadUserByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public UtilisateurEntite loadUserByUsername(String username) {
+        return userRepository.findByLogin(username);
     }
 
 }

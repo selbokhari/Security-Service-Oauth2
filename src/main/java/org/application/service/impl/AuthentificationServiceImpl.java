@@ -1,7 +1,7 @@
-package org.application.security.service.impl;
+package org.application.service.impl;
 
 import lombok.AllArgsConstructor;
-import org.application.security.service.AuthentificationService;
+import org.application.service.AuthentificationService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

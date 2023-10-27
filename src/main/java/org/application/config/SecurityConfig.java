@@ -1,4 +1,4 @@
-package org.application.security.config;
+package org.application.config;
 
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
