@@ -7,7 +7,6 @@ import org.application.entities.RoleEntite;
 import org.application.entities.UtilisateurEntite;
 import org.application.exception.BusinessException;
 import org.application.repositories.UtilisateurRepository;
-import org.application.service.impl.RoleServiceImpl;
 import org.application.service.impl.UtilisateurServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,7 +28,7 @@ import static org.mockito.BDDMockito.given;
 class UtilisateurServiceTest {
 
     @Mock
-    private RoleServiceImpl roleServiceImpl;
+    private RoleService roleService;
 
     @Mock
     private UtilisateurRepository utilisateurRepository;
@@ -71,7 +70,7 @@ class UtilisateurServiceTest {
     @Test
     @DisplayName("Tester l'affectation des roles à un utilisateur")
     void affecterRolesUtilisateurTest() {
-        // init:
+        // init: redéfinir le retour des fonctions
         given(utilisateurRepository.findById(1L)).willReturn(Optional.of(utilisateurEntite));
         given(utilisateurRepository.findById(2L)).willReturn(Optional.empty());
 
@@ -79,22 +78,24 @@ class UtilisateurServiceTest {
         final Set<RoleEntite> rolesEntite = Set.of(new RoleEntite(1L, "ADMIN"), new RoleEntite(2L, "USER"));
         final Set<String> nomRoles = Set.of("ADMIN", "USER");
 
-        given(roleServiceImpl.recupererRolesParNoms(nomRoles)).willReturn(rolesEntite);
+        given(roleService.recupererRolesParNoms(nomRoles)).willReturn(rolesEntite);
         given(utilisateurRepository.save(utilisateurEntite)).willReturn(utilisateurEntite);
 
-        // action:
+        // action: affecter les roles à l'utilisateur
         UtilisateurEntite utilisateur = utilisateurServiceImpl.affecterRolesUtilisateur(1L, rolesDto);
 
-        // vérification:
+        // vérification: si les roles ont été bien affectés à l'utilisateur en question.
         assertThat(utilisateur).isNotNull();
         assertThat(utilisateur.getRoles()).isEqualTo(rolesEntite);
         assertThatThrownBy(() -> utilisateurServiceImpl.affecterRolesUtilisateur(2L, rolesDto)).isInstanceOf(BusinessException.class);
+        // on peut aussi utiliser : Assertions.assertThrows(BusinessException.class, () -> utilisateurServiceImpl.affecterRolesUtilisateur(2L, rolesDto));
+        // verify(utilisateurRepository, never()).save(utilisateurEntite);
     }
 
     @Test
     @DisplayName("Tester la mise à jour d'un utilisateur")
     void mettreAjourUtilisateurTest() {
-        // init:
+        // init: initialiser le jeu de données de test
         UtilisateurDto utilisateurDto = UtilisateurDto.builder()
                 .userId(1L)
                 .login("Login MAJ")
@@ -116,10 +117,10 @@ class UtilisateurServiceTest {
         given(utilisateurRepository.findById(utilisateurDto.getUserId())).willReturn(Optional.of(utilisateurEntite));
         given(utilisateurRepository.save(utilisateurMaj)).willReturn(utilisateurMaj);
 
-        // action:
+        // action: mettre à jour l'utilisateur
         UtilisateurDto utilisateur = utilisateurServiceImpl.mettreAjourUtilisateur(utilisateurDto);
 
-        // vérification:
+        // vérification: si l'utilisateur a été mise à jour
         assertThat(utilisateur).isEqualTo(utilisateurDto);
     }
 
