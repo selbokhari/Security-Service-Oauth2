@@ -9,7 +9,7 @@ import org.application.exception.BusinessException;
 import org.application.mapper.UserEntiteMapper;
 import org.application.repositories.UserRepository;
 import org.application.service.RoleService;
-import org.application.service.UserService;
+import org.application.service.UtilisateurService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class UserServiceImpl implements UserService {
+public class UtilisateurServiceImpl implements UtilisateurService {
 
     private final UserRepository userRepository;
     private final RoleService roleService;
