@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
@@ -93,15 +95,32 @@ class UserRepositoryTest {
     void suppressionTest() {
         // init: persister un utilisateur et vérifier qu'il est persisté.
         UtilisateurEntite nouveauUtilisateur = userRepository.save(utilisateurEntite);
-        UtilisateurEntite utilisateurPersiste = userRepository.findById(nouveauUtilisateur.getUserId()).get();
-        assertThat(utilisateurPersiste).isNotNull();
+        Optional<UtilisateurEntite> utilisateurPersiste = userRepository.findById(nouveauUtilisateur.getUserId());
+        assertThat(utilisateurPersiste).isPresent();
 
         // action: supprimer l'utilisateur persisté
         userRepository.delete(nouveauUtilisateur);
 
         // vérification:
-        UtilisateurEntite utilisateurSupprime = userRepository.findById(nouveauUtilisateur.getUserId()).orElse(null);
-        assertThat(utilisateurSupprime).isNull();
+        Optional<UtilisateurEntite> utilisateurSupprime = userRepository.findById(nouveauUtilisateur.getUserId());
+        assertThat(utilisateurSupprime).isEmpty();
+    }
+
+    @Test
+    @DisplayName("Tester la récupération d'un utilisateur par nom et prenom")
+    void trouverParNomEtPrenomTest() {
+        // init: persister un utilisateur
+        UtilisateurEntite utilisateurPersiste = userRepository.save(utilisateurEntite);
+
+        // action: recuperer chercher l'utilisateur persisté par son et son prénom
+        userRepository.trouverParNomEtPrenom(utilisateurPersiste.getNom(), utilisateurPersiste.getPrenom());
+
+
+        // vérification: si c'est le bon utilisateur
+        UtilisateurEntite utilisateurEntite = userRepository.trouverParNomEtPrenom(utilisateurPersiste.getNom(), utilisateurPersiste.getPrenom());
+        assertThat(utilisateurEntite).isNotNull();
+        assertThat(utilisateurEntite.getNom()).isEqualTo(utilisateurPersiste.getNom());
+        assertThat(utilisateurEntite.getPrenom()).isEqualTo(utilisateurPersiste.getPrenom());
     }
 
 }
