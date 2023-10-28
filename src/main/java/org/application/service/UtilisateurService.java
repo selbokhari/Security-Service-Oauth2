@@ -14,12 +14,10 @@ public interface UtilisateurService {
 
     UtilisateurDto mettreAjourUtilisateur(UtilisateurDto utilisateurDto);
 
-    void affecterRolesUtilisateur(Long id, Set<RoleDto> roles);
+    UtilisateurEntite affecterRolesUtilisateur(Long id, Set<RoleDto> roles);
 
     UtilisateurEntite recupererUtilisateurParLogin(String login);
 
     void supprimerUtilisateur(Long id);
-
-    UtilisateurEntite loadUserByUsername(String username);
 
 }

@@ -50,12 +50,12 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     }
 
     @Override
-    public void affecterRolesUtilisateur(Long id, Set<RoleDto> roles) {
+    public UtilisateurEntite affecterRolesUtilisateur(Long id, Set<RoleDto> roles) {
         UtilisateurEntite utilisateur = userRepository.findById(id).orElseThrow(() -> new BusinessException(Raison.UTILISATEUR_NON_TROUVEE));
         Set<String> nomeRoles = roles.stream().map(RoleDto::getNom).collect(Collectors.toSet());
         Set<RoleEntite> rolesEntites =  roleService.recupererRolesParNoms(nomeRoles);
         utilisateur.getRoles().addAll(rolesEntites);
-        userRepository.save(utilisateur);
+        return userRepository.save(utilisateur);
     }
 
     @Override
@@ -68,10 +68,6 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     public void supprimerUtilisateur(Long id) {
         userRepository.findById(id)
                 .ifPresent(userRepository::delete);
-    }
-
-    public UtilisateurEntite loadUserByUsername(String username) {
-        return userRepository.findByLogin(username);
     }
 
 }

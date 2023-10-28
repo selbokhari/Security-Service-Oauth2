@@ -1,5 +1,6 @@
 package org.application.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
@@ -7,6 +8,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Data
+@AllArgsConstructor
 @Builder
 public class RoleDto {
 
@@ -16,6 +18,6 @@ public class RoleDto {
     @NotEmpty
     private String nom;
 
-    private String authorite;
+    private String authorites;
 
 }

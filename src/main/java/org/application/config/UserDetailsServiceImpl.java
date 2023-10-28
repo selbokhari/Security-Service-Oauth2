@@ -18,7 +18,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UtilisateurEntite userEntite = utilisateurService.loadUserByUsername(username);
+        UtilisateurEntite userEntite = utilisateurService.recupererUtilisateurParLogin(username);
         String[] roles = userEntite.getRoles().stream().map(RoleEntite::getNom).toArray(String[]::new);
         return User.builder()
                 .username(userEntite.getLogin())
