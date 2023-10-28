@@ -1,7 +1,7 @@
 package org.application;
 
 
-import org.application.service.AuthentificationService;
+import org.application.service.securite.AuthentificationService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

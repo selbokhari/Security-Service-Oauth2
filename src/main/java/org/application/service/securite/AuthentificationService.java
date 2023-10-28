@@ -1,4 +1,4 @@
-package org.application.service;
+package org.application.service.securite;
 
 import org.springframework.security.core.Authentication;
 

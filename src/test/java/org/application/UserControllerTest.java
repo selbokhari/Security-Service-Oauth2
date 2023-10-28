@@ -1,6 +1,6 @@
 package org.application;
 
-import org.application.service.AuthentificationService;
+import org.application.service.securite.AuthentificationService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -58,7 +58,7 @@ class UserControllerTest {
     }
 
     private HttpResponse<String> effectuerAppelRest(String jwtToken) throws IOException, InterruptedException {
-        String uri = MessageFormat.format(USER_URI, String.valueOf(port), 1l);
+        String uri = MessageFormat.format(USER_URI, String.valueOf(port), 1L);
         HttpRequest userRequest = HttpRequest.newBuilder()
                 .uri(URI.create(uri))
                 .header(AUTHORIZATION_HEADER, MessageFormat.format(BEARER_TOKEN, jwtToken))

@@ -1,23 +1,23 @@
 package org.application.mapper;
 
-import org.application.dto.UserDto;
+import org.application.dto.UtilisateurDto;
 import org.application.entities.UtilisateurEntite;
 
 public class UserEntiteMapper {
 
-    public static UtilisateurEntite mapToUserEntite(UserDto userDto) {
+    public static UtilisateurEntite mapToUserEntite(UtilisateurDto utilisateurDto) {
         return UtilisateurEntite.builder()
-                .prenom(userDto.getPrenom())
-                .nom(userDto.getNom())
-                .password(userDto.getPassword())
-                .login(userDto.getLogin())
-                .email(userDto.getEmail())
-                .roles(RoleMapper.mapToListRoleEntite(userDto.getRoles()))
+                .prenom(utilisateurDto.getPrenom())
+                .nom(utilisateurDto.getNom())
+                .password(utilisateurDto.getPassword())
+                .login(utilisateurDto.getLogin())
+                .email(utilisateurDto.getEmail())
+                .roles(RoleMapper.mapToListRoleEntite(utilisateurDto.getRoles()))
                 .build();
     }
 
-    public static UserDto mapToUserDto(UtilisateurEntite userEntite) {
-        return UserDto.builder()
+    public static UtilisateurDto mapToUserDto(UtilisateurEntite userEntite) {
+        return UtilisateurDto.builder()
                 .prenom(userEntite.getPrenom())
                 .nom(userEntite.getNom())
                 .userId(userEntite.getUserId())

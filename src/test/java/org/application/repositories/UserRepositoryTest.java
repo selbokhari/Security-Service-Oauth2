@@ -101,7 +101,7 @@ class UserRepositoryTest {
         // action: supprimer l'utilisateur persisté
         userRepository.delete(nouveauUtilisateur);
 
-        // vérification:
+        // vérification: si l'utilisateur a été supprimé
         Optional<UtilisateurEntite> utilisateurSupprime = userRepository.findById(nouveauUtilisateur.getUserId());
         assertThat(utilisateurSupprime).isEmpty();
     }

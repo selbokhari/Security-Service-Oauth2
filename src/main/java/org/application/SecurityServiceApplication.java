@@ -1,10 +1,10 @@
 package org.application;
 
 import org.application.dto.RoleDto;
-import org.application.dto.UserDto;
+import org.application.dto.UtilisateurDto;
 import org.application.config.RsaKeysConfig;
 import org.application.service.RoleService;
-import org.application.service.UserService;
+import org.application.service.UtilisateurService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -34,16 +34,16 @@ public class SecurityServiceApplication {
 
     @Bean
     @Profile("!test")
-    public CommandLineRunner init(RoleService roleService, UserService userService, PasswordEncoder passwordEncoder) {
+    public CommandLineRunner init(RoleService roleService, UtilisateurService utilisateurService, PasswordEncoder passwordEncoder) {
         return args -> {
             // création des roles
             RoleDto userRole = RoleDto.builder()
-                    .roleId(1l)
+                    .roleId(1L)
                     .nom("USER")
                     .build();
 
             RoleDto adminRole = RoleDto.builder()
-                    .roleId(2l)
+                    .roleId(2L)
                     .nom("ADMIN")
                     .build();
 
@@ -51,7 +51,7 @@ public class SecurityServiceApplication {
             RoleDto adminRoleDto = roleService.creerRole(adminRole);
 
             // création d'utilisateur
-            UserDto user = UserDto.builder()
+            UtilisateurDto user = UtilisateurDto.builder()
                     .nom("nom01")
                     .prenom("prenom01")
                     .login("user")
@@ -60,7 +60,7 @@ public class SecurityServiceApplication {
                     .build();
 
             // création d'admin
-            UserDto admin = UserDto.builder()
+            UtilisateurDto admin = UtilisateurDto.builder()
                     .prenom("prenom02")
                     .nom("nom02")
                     .login("admin")
@@ -68,12 +68,12 @@ public class SecurityServiceApplication {
                     .password(passwordEncoder.encode("admin"))
                     .build();
 
-            UserDto userDto = userService.creerUtilisateur(user);
-            UserDto adminDto = userService.creerUtilisateur(admin);
+            UtilisateurDto utilisateurDto = utilisateurService.creerUtilisateur(user);
+            UtilisateurDto adminDto = utilisateurService.creerUtilisateur(admin);
 
             // attacher les roles aux utilisateurs
-            userService.affecterRolesUtilisateur( adminDto.getUserId(),Set.of(userRoleDto, adminRoleDto));
-            userService.affecterRolesUtilisateur( userDto.getUserId(),Set.of(userRoleDto));
+            utilisateurService.affecterRolesUtilisateur( adminDto.getUserId(),Set.of(userRoleDto, adminRoleDto));
+            utilisateurService.affecterRolesUtilisateur( utilisateurDto.getUserId(),Set.of(userRoleDto));
         };
     }
 

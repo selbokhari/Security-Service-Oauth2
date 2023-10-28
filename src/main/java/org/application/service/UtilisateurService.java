@@ -1,18 +1,18 @@
 package org.application.service;
 
 import org.application.dto.RoleDto;
-import org.application.dto.UserDto;
+import org.application.dto.UtilisateurDto;
 import org.application.entities.UtilisateurEntite;
 
 import java.util.Set;
 
-public interface UserService {
+public interface UtilisateurService {
 
-    UserDto recupererUtilisateurParId(Long id);
+    UtilisateurDto recupererUtilisateurParId(Long id);
 
-    UserDto creerUtilisateur(UserDto userDto);
+    UtilisateurDto creerUtilisateur(UtilisateurDto utilisateurDto);
 
-    UserDto mettreAjourUtilisateur(UserDto userDto);
+    UtilisateurDto mettreAjourUtilisateur(UtilisateurDto utilisateurDto);
 
     void affecterRolesUtilisateur(Long id, Set<RoleDto> roles);
 

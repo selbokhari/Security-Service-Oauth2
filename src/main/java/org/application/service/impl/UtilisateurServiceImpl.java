@@ -1,7 +1,7 @@
 package org.application.service.impl;
 
 import org.application.dto.RoleDto;
-import org.application.dto.UserDto;
+import org.application.dto.UtilisateurDto;
 import org.application.entities.RoleEntite;
 import org.application.entities.UtilisateurEntite;
 import org.application.exception.BusinessException.Raison;
@@ -27,23 +27,23 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     private final RoleService roleService;
 
     @Override
-    public UserDto recupererUtilisateurParId(Long id) {
+    public UtilisateurDto recupererUtilisateurParId(Long id) {
         return userRepository.findById(id)
                 .map(UserEntiteMapper::mapToUserDto)
                 .orElse(null);
     }
 
     @Override
-    public UserDto creerUtilisateur(UserDto userDto) {
-        return Optional.of(UserEntiteMapper.mapToUserEntite(userDto))
+    public UtilisateurDto creerUtilisateur(UtilisateurDto utilisateurDto) {
+        return Optional.of(UserEntiteMapper.mapToUserEntite(utilisateurDto))
                 .map(userRepository::save)
                 .map(UserEntiteMapper::mapToUserDto)
                 .orElse(null);
     }
 
     @Override
-    public UserDto mettreAjourUtilisateur(UserDto userDto) {
-        return Optional.of(UserEntiteMapper.mapToUserEntite(userDto))
+    public UtilisateurDto mettreAjourUtilisateur(UtilisateurDto utilisateurDto) {
+        return Optional.of(UserEntiteMapper.mapToUserEntite(utilisateurDto))
                 .map(userRepository::save)
                 .map(UserEntiteMapper::mapToUserDto)
                 .orElse(null);
