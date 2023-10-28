@@ -23,12 +23,12 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class UtilisateurServiceImpl implements UtilisateurService {
 
-    private final UserRepository userRepository;
+    private final UserRepository utilisateurRepository;
     private final RoleService roleService;
 
     @Override
     public UtilisateurDto recupererUtilisateurParId(Long id) {
-        return userRepository.findById(id)
+        return utilisateurRepository.findById(id)
                 .map(UserEntiteMapper::mapToUserDto)
                 .orElse(null);
     }
@@ -36,38 +36,39 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     @Override
     public UtilisateurDto creerUtilisateur(UtilisateurDto utilisateurDto) {
         return Optional.of(UserEntiteMapper.mapToUserEntite(utilisateurDto))
-                .map(userRepository::save)
+                .map(utilisateurRepository::save)
                 .map(UserEntiteMapper::mapToUserDto)
                 .orElse(null);
     }
 
     @Override
     public UtilisateurDto mettreAjourUtilisateur(UtilisateurDto utilisateurDto) {
+        utilisateurRepository.findById(utilisateurDto.getUserId()).orElseThrow(() -> new BusinessException(Raison.UTILISATEUR_NON_TROUVEE));
         return Optional.of(UserEntiteMapper.mapToUserEntite(utilisateurDto))
-                .map(userRepository::save)
+                .map(utilisateurRepository::save)
                 .map(UserEntiteMapper::mapToUserDto)
                 .orElse(null);
     }
 
     @Override
     public UtilisateurEntite affecterRolesUtilisateur(Long id, Set<RoleDto> roles) {
-        UtilisateurEntite utilisateur = userRepository.findById(id).orElseThrow(() -> new BusinessException(Raison.UTILISATEUR_NON_TROUVEE));
+        UtilisateurEntite utilisateur = utilisateurRepository.findById(id).orElseThrow(() -> new BusinessException(Raison.UTILISATEUR_NON_TROUVEE));
         Set<String> nomeRoles = roles.stream().map(RoleDto::getNom).collect(Collectors.toSet());
         Set<RoleEntite> rolesEntites =  roleService.recupererRolesParNoms(nomeRoles);
         utilisateur.getRoles().addAll(rolesEntites);
-        return userRepository.save(utilisateur);
+        return utilisateurRepository.save(utilisateur);
     }
 
     @Override
     public UtilisateurEntite recupererUtilisateurParLogin(String login) {
-        return userRepository.findByLogin(login);
+        return utilisateurRepository.findByLogin(login);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void supprimerUtilisateur(Long id) {
-        userRepository.findById(id)
-                .ifPresent(userRepository::delete);
+        utilisateurRepository.findById(id)
+                .ifPresent(utilisateurRepository::delete);
     }
 
 }

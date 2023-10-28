@@ -1,6 +1,7 @@
 package org.application.service;
 
 
+import net.bytebuddy.utility.dispatcher.JavaDispatcher;
 import org.application.dto.RoleDto;
 import org.application.dto.UtilisateurDto;
 import org.application.entities.RoleEntite;
@@ -27,7 +28,6 @@ class UtilisateurServiceTest {
     private UserRepository utilisateurRepository;
     private UtilisateurService utilisateurService;
     private UtilisateurEntite utilisateurEntite;
-
 
     @BeforeEach
     void init() {
@@ -82,6 +82,38 @@ class UtilisateurServiceTest {
         assertThat(utilisateur).isNotNull();
         assertThat(utilisateur.getRoles()).isEqualTo(rolesEntite);
         assertThatThrownBy(() -> utilisateurService.affecterRolesUtilisateur(2L, rolesDto)).isInstanceOf(BusinessException.class);
+    }
+
+    @Test
+    @DisplayName("Tester la mise à jour d'un utilisateur")
+    void mettreAjourUtilisateurTest() {
+        // init:
+        UtilisateurDto utilisateurDto = UtilisateurDto.builder()
+                .userId(1L)
+                .login("Login MAJ")
+                .email("emailMaj@gmaiL.fr")
+                .nom("nom MAJ")
+                .prenom("prenom MAJ")
+                .roles(new HashSet<>())
+                .build();
+
+        UtilisateurEntite utilisateurMaj = UtilisateurEntite.builder()
+                .userId(1L)
+                .login("Login MAJ")
+                .email("emailMaj@gmaiL.fr")
+                .nom("nom MAJ")
+                .prenom("prenom MAJ")
+                .roles(new HashSet<>())
+                .build();
+
+        given(utilisateurRepository.findById(utilisateurDto.getUserId())).willReturn(Optional.of(utilisateurEntite));
+        given(utilisateurRepository.save(utilisateurMaj)).willReturn(utilisateurMaj);
+
+        // action:
+        UtilisateurDto utilisateur = utilisateurService.mettreAjourUtilisateur(utilisateurDto);
+
+        // vérification:
+        assertThat(utilisateur).isEqualTo(utilisateurDto);
     }
 
 }

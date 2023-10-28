@@ -7,6 +7,7 @@ public class UserEntiteMapper {
 
     public static UtilisateurEntite mapToUserEntite(UtilisateurDto utilisateurDto) {
         return UtilisateurEntite.builder()
+                .userId(utilisateurDto.getUserId())
                 .prenom(utilisateurDto.getPrenom())
                 .nom(utilisateurDto.getNom())
                 .password(utilisateurDto.getPassword())
