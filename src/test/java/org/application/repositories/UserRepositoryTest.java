@@ -10,7 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-public class UserRepositoryTest {
+class UserRepositoryTest {
 
     @Autowired
     private UserRepository userRepository;
@@ -32,7 +32,7 @@ public class UserRepositoryTest {
 
     @Test
     @DisplayName("Tester la persistance d'un utilisateur")
-    public void saveUserEntiteTest() {
+    void saveUserEntiteTest() {
 
         // init: enregistrer un utilisateur pour effectuer le test => déjà faite sur @BeforeEach
 
@@ -42,14 +42,14 @@ public class UserRepositoryTest {
         // vérification:  d'utilisateur récupéré
         assertThat(nouveauUtilisateur).isNotNull();
         assertThat(nouveauUtilisateur.getUserId()).isNotNull();
-        assertThat(nouveauUtilisateur.getUserId()).isGreaterThan(0);
+        assertThat(nouveauUtilisateur.getUserId()).isPositive();
         assertThat(nouveauUtilisateur.getLogin()).isEqualTo(utilisateurEntite.getLogin());
         assertThat(nouveauUtilisateur.getEmail()).isEqualTo(utilisateurEntite.getEmail());
     }
 
     @Test
     @DisplayName("Tester la recuperation d'un utilisateur par son login")
-    public void findByLoginTest() {
+    void findByLoginTest() {
 
         // init : persister un utilisteur dans la BDD
         UtilisateurEntite nouveauUtilisateur = userRepository.save(utilisateurEntite);
@@ -65,7 +65,7 @@ public class UserRepositoryTest {
 
     @Test
     @DisplayName("Tester la mise à jour d'un utilisateur")
-    public void miseAjourUtilisateurTest() {
+    void miseAjourUtilisateurTest() {
         final String nouveauEmail = "emailUpdate@gmail.fr";
         final String nouveauNom = "nouveau nom";
         final String nouveauPrenom = "nouveau prenom";
@@ -90,7 +90,7 @@ public class UserRepositoryTest {
 
     @Test
     @DisplayName("Test la suppression d'un utilisateur")
-    public void suppressionTest() {
+    void suppressionTest() {
         // init: persister un utilisateur et vérifier qu'il est persisté.
         UtilisateurEntite nouveauUtilisateur = userRepository.save(utilisateurEntite);
         UtilisateurEntite utilisateurPersiste = userRepository.findById(nouveauUtilisateur.getUserId()).get();
