@@ -4,6 +4,7 @@ import org.application.dto.RoleDto;
 import org.application.dto.UtilisateurDto;
 import org.application.entities.UtilisateurEntite;
 
+import java.util.List;
 import java.util.Set;
 
 public interface UtilisateurService {
@@ -19,5 +20,7 @@ public interface UtilisateurService {
     UtilisateurEntite recupererUtilisateurParLogin(String login);
 
     void supprimerUtilisateur(Long id);
+
+    List<UtilisateurDto> recupererTousLesUtilisateurs();
 
 }

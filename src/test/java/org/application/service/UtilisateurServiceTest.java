@@ -16,11 +16,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 
@@ -37,6 +35,7 @@ class UtilisateurServiceTest {
     private UtilisateurServiceImpl utilisateurServiceImpl;
 
     private UtilisateurEntite utilisateurEntite;
+    private UtilisateurDto utilisateurDto;
 
     @BeforeEach
     void init() {
@@ -45,6 +44,15 @@ class UtilisateurServiceTest {
                 .login("login01")
                 .email("email@gmail.fr")
                 .password("password")
+                .nom("nom01")
+                .prenom("prenom01")
+                .roles(new HashSet<>())
+                .build();
+
+        utilisateurDto = UtilisateurDto.builder()
+                .userId(1L)
+                .login("login01")
+                .email("email@gmail.fr")
                 .nom("nom01")
                 .prenom("prenom01")
                 .roles(new HashSet<>())
@@ -122,6 +130,53 @@ class UtilisateurServiceTest {
 
         // vérification: si l'utilisateur a été mise à jour
         assertThat(utilisateur).isEqualTo(utilisateurDto);
+    }
+
+    @Test
+    @DisplayName("Tester la récupération de tous les utilisateurs")
+    void recupererTousLesUtilisateursTest() {
+        // init:
+        UtilisateurDto utilisateurDto02 = UtilisateurDto.builder()
+                .userId(2L)
+                .login("Login MAJ")
+                .email("emailMaj@gmaiL.fr")
+                .nom("nom MAJ")
+                .prenom("prenom MAJ")
+                .roles(new HashSet<>())
+                .build();
+
+        UtilisateurEntite utilisateurEntite02 = UtilisateurEntite.builder()
+                .userId(2L)
+                .login("Login MAJ")
+                .email("emailMaj@gmaiL.fr")
+                .nom("nom MAJ")
+                .prenom("prenom MAJ")
+                .roles(new HashSet<>())
+                .build();
+
+        given(utilisateurRepository.findAll()).willReturn(List.of(utilisateurEntite, utilisateurEntite02));
+
+        // action: récupérer tous les utilisateurs
+        List<UtilisateurDto> utilisateurs = utilisateurServiceImpl.recupererTousLesUtilisateurs();
+
+        // vérification: si les utilisateurs retournés sont correctes
+        assertThat(utilisateurs).isNotNull();
+        assertThat(utilisateurs.size()).isEqualTo(2L);
+        assertThat(utilisateurs).isEqualTo(List.of(utilisateurDto, utilisateurDto02));
+    }
+
+    @Test
+    @DisplayName("Tester la récupération de tous les utilisateurs dont la table est vide")
+    void recupererTousLesUtilisateurs_SansUtilisateursDansLaBDDTest() {
+        // init:
+        given(utilisateurRepository.findAll()).willReturn(Collections.emptyList());
+
+        // action: récupérer tous les utilisateurs
+        List<UtilisateurDto> utilisateurs = utilisateurServiceImpl.recupererTousLesUtilisateurs();
+
+        // vérification: si les utilisateurs retournés sont correctes
+        assertThat(utilisateurs.size()).isZero();
+        assertThat(utilisateurs).isEqualTo(Collections.emptyList());
     }
 
 }

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -69,6 +70,14 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     public void supprimerUtilisateur(Long id) {
         utilisateurRepository.findById(id)
                 .ifPresent(utilisateurRepository::delete);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public List<UtilisateurDto> recupererTousLesUtilisateurs() {
+        return utilisateurRepository.findAll()
+                .stream().map(UserEntiteMapper::mapToUserDto)
+                .toList();
     }
 
 }
