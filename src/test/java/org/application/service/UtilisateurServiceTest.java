@@ -21,6 +21,9 @@ import java.util.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class UtilisateurServiceTest {
@@ -168,7 +171,7 @@ class UtilisateurServiceTest {
     @Test
     @DisplayName("Tester la récupération de tous les utilisateurs dont la table est vide")
     void recupererTousLesUtilisateurs_SansUtilisateursDansLaBDDTest() {
-        // init:
+        // init: redéfinir la récupération des utilisateurs
         given(utilisateurRepository.findAll()).willReturn(Collections.emptyList());
 
         // action: récupérer tous les utilisateurs
@@ -177,6 +180,20 @@ class UtilisateurServiceTest {
         // vérification: si les utilisateurs retournés sont correctes
         assertThat(utilisateurs.size()).isZero();
         assertThat(utilisateurs).isEqualTo(Collections.emptyList());
+    }
+
+    @Test
+    @DisplayName("Tester la suppression d'un utilisateur")
+    void supprimerUtilisateurTest() {
+        // init: redéfinir la méthode de la suppression d'un utilisateur
+        willDoNothing().given(utilisateurRepository).delete(utilisateurEntite);
+        given(utilisateurRepository.findById(1L)).willReturn(Optional.of(utilisateurEntite));
+
+        // action: récupérer tous les utilisateurs
+        utilisateurServiceImpl.supprimerUtilisateur(1L);
+
+        // vérification:
+        verify(utilisateurRepository, times(1)).delete(utilisateurEntite);
     }
 
 }
