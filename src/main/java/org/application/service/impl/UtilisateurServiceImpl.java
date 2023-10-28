@@ -7,7 +7,7 @@ import org.application.entities.UtilisateurEntite;
 import org.application.exception.BusinessException.Raison;
 import org.application.exception.BusinessException;
 import org.application.mapper.UserEntiteMapper;
-import org.application.repositories.UserRepository;
+import org.application.repositories.UtilisateurRepository;
 import org.application.service.RoleService;
 import org.application.service.UtilisateurService;
 import lombok.AllArgsConstructor;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class UtilisateurServiceImpl implements UtilisateurService {
 
-    private final UserRepository utilisateurRepository;
+    private final UtilisateurRepository utilisateurRepository;
     private final RoleService roleService;
 
     @Override

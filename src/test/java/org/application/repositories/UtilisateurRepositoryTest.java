@@ -12,10 +12,10 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-class UserRepositoryTest {
+class UtilisateurRepositoryTest {
 
     @Autowired
-    private UserRepository userRepository;
+    private UtilisateurRepository utilisateurRepository;
 
     private final String LOGIN_TEST = "user01";
     private UtilisateurEntite utilisateurEntite;
@@ -39,7 +39,7 @@ class UserRepositoryTest {
         // init: enregistrer un utilisateur pour effectuer le test => déjà faite sur @BeforeEach
 
         // action: récupérer l'utilisateur créer par son login
-        UtilisateurEntite nouveauUtilisateur = userRepository.save(utilisateurEntite);
+        UtilisateurEntite nouveauUtilisateur = utilisateurRepository.save(utilisateurEntite);
 
         // vérification:  d'utilisateur récupéré
         assertThat(nouveauUtilisateur).isNotNull();
@@ -54,10 +54,10 @@ class UserRepositoryTest {
     void findByLoginTest() {
 
         // init : persister un utilisteur dans la BDD
-        UtilisateurEntite nouveauUtilisateur = userRepository.save(utilisateurEntite);
+        UtilisateurEntite nouveauUtilisateur = utilisateurRepository.save(utilisateurEntite);
 
         // action: récupérer l'utilisateur depuis la BDD par son login
-        UtilisateurEntite utilisateurRecupere = userRepository.findByLogin(LOGIN_TEST);
+        UtilisateurEntite utilisateurRecupere = utilisateurRepository.findByLogin(LOGIN_TEST);
 
         // vérification: si c'est le bon utilisateur
         assertThat(utilisateurRecupere).isNotNull();
@@ -74,13 +74,13 @@ class UserRepositoryTest {
         final String noveauLogin = "nouveau login";
 
         // init: persister un utilisateur et effectuer des modifications
-        UtilisateurEntite nouveauUtilisateur = userRepository.save(utilisateurEntite);
+        UtilisateurEntite nouveauUtilisateur = utilisateurRepository.save(utilisateurEntite);
         nouveauUtilisateur.setEmail(nouveauEmail);
         nouveauUtilisateur.setNom(nouveauNom);
         nouveauUtilisateur.setPrenom(nouveauPrenom);
         nouveauUtilisateur.setLogin(noveauLogin);
         // action: maj l'utilisateur
-        UtilisateurEntite updatedUser = userRepository.save(nouveauUtilisateur);
+        UtilisateurEntite updatedUser = utilisateurRepository.save(nouveauUtilisateur);
 
         // vérification: si les modifications ont ete prises en compte
         assertThat(updatedUser.getUserId()).isEqualTo(nouveauUtilisateur.getUserId());
@@ -94,15 +94,15 @@ class UserRepositoryTest {
     @DisplayName("Test la suppression d'un utilisateur")
     void suppressionTest() {
         // init: persister un utilisateur et vérifier qu'il est persisté.
-        UtilisateurEntite nouveauUtilisateur = userRepository.save(utilisateurEntite);
-        Optional<UtilisateurEntite> utilisateurPersiste = userRepository.findById(nouveauUtilisateur.getUserId());
+        UtilisateurEntite nouveauUtilisateur = utilisateurRepository.save(utilisateurEntite);
+        Optional<UtilisateurEntite> utilisateurPersiste = utilisateurRepository.findById(nouveauUtilisateur.getUserId());
         assertThat(utilisateurPersiste).isPresent();
 
         // action: supprimer l'utilisateur persisté
-        userRepository.delete(nouveauUtilisateur);
+        utilisateurRepository.delete(nouveauUtilisateur);
 
         // vérification: si l'utilisateur a été supprimé
-        Optional<UtilisateurEntite> utilisateurSupprime = userRepository.findById(nouveauUtilisateur.getUserId());
+        Optional<UtilisateurEntite> utilisateurSupprime = utilisateurRepository.findById(nouveauUtilisateur.getUserId());
         assertThat(utilisateurSupprime).isEmpty();
     }
 
@@ -110,14 +110,14 @@ class UserRepositoryTest {
     @DisplayName("Tester la récupération d'un utilisateur par nom et prenom")
     void trouverParNomEtPrenomTest() {
         // init: persister un utilisateur
-        UtilisateurEntite utilisateurPersiste = userRepository.save(utilisateurEntite);
+        UtilisateurEntite utilisateurPersiste = utilisateurRepository.save(utilisateurEntite);
 
         // action: recuperer chercher l'utilisateur persisté par son et son prénom
-        userRepository.trouverParNomEtPrenom(utilisateurPersiste.getNom(), utilisateurPersiste.getPrenom());
+        utilisateurRepository.trouverParNomEtPrenom(utilisateurPersiste.getNom(), utilisateurPersiste.getPrenom());
 
 
         // vérification: si c'est le bon utilisateur
-        UtilisateurEntite utilisateurEntite = userRepository.trouverParNomEtPrenom(utilisateurPersiste.getNom(), utilisateurPersiste.getPrenom());
+        UtilisateurEntite utilisateurEntite = utilisateurRepository.trouverParNomEtPrenom(utilisateurPersiste.getNom(), utilisateurPersiste.getPrenom());
         assertThat(utilisateurEntite).isNotNull();
         assertThat(utilisateurEntite.getNom()).isEqualTo(utilisateurPersiste.getNom());
         assertThat(utilisateurEntite.getPrenom()).isEqualTo(utilisateurPersiste.getPrenom());

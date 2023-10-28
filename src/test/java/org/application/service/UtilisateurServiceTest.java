@@ -1,18 +1,21 @@
 package org.application.service;
 
 
-import net.bytebuddy.utility.dispatcher.JavaDispatcher;
 import org.application.dto.RoleDto;
 import org.application.dto.UtilisateurDto;
 import org.application.entities.RoleEntite;
 import org.application.entities.UtilisateurEntite;
 import org.application.exception.BusinessException;
-import org.application.repositories.UserRepository;
+import org.application.repositories.UtilisateurRepository;
+import org.application.service.impl.RoleServiceImpl;
 import org.application.service.impl.UtilisateurServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -22,18 +25,22 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 
+@ExtendWith(MockitoExtension.class)
 class UtilisateurServiceTest {
 
-    private RoleService roleService;
-    private UserRepository utilisateurRepository;
-    private UtilisateurService utilisateurService;
+    @Mock
+    private RoleServiceImpl roleServiceImpl;
+
+    @Mock
+    private UtilisateurRepository utilisateurRepository;
+
+    @InjectMocks
+    private UtilisateurServiceImpl utilisateurServiceImpl;
+
     private UtilisateurEntite utilisateurEntite;
 
     @BeforeEach
     void init() {
-        utilisateurRepository = Mockito.mock(UserRepository.class);
-        roleService = Mockito.mock(RoleService.class);
-        utilisateurService = new UtilisateurServiceImpl(utilisateurRepository, roleService);
         utilisateurEntite = UtilisateurEntite.builder()
                 .userId(1L)
                 .login("login01")
@@ -52,7 +59,7 @@ class UtilisateurServiceTest {
         given(utilisateurRepository.findById(utilisateurEntite.getUserId())).willReturn(Optional.of(utilisateurEntite));
 
         // action: récupérer l'utilisateur par son id
-        UtilisateurDto utilisateurDto = utilisateurService.recupererUtilisateurParId(utilisateurEntite.getUserId());
+        UtilisateurDto utilisateurDto = utilisateurServiceImpl.recupererUtilisateurParId(utilisateurEntite.getUserId());
 
         // vérification: des données d'utilisateur retourné
         assertThat(utilisateurDto).isNotNull();
@@ -72,16 +79,16 @@ class UtilisateurServiceTest {
         final Set<RoleEntite> rolesEntite = Set.of(new RoleEntite(1L, "ADMIN"), new RoleEntite(2L, "USER"));
         final Set<String> nomRoles = Set.of("ADMIN", "USER");
 
-        given(roleService.recupererRolesParNoms(nomRoles)).willReturn(rolesEntite);
+        given(roleServiceImpl.recupererRolesParNoms(nomRoles)).willReturn(rolesEntite);
         given(utilisateurRepository.save(utilisateurEntite)).willReturn(utilisateurEntite);
 
         // action:
-        UtilisateurEntite utilisateur = utilisateurService.affecterRolesUtilisateur(1L, rolesDto);
+        UtilisateurEntite utilisateur = utilisateurServiceImpl.affecterRolesUtilisateur(1L, rolesDto);
 
         // vérification:
         assertThat(utilisateur).isNotNull();
         assertThat(utilisateur.getRoles()).isEqualTo(rolesEntite);
-        assertThatThrownBy(() -> utilisateurService.affecterRolesUtilisateur(2L, rolesDto)).isInstanceOf(BusinessException.class);
+        assertThatThrownBy(() -> utilisateurServiceImpl.affecterRolesUtilisateur(2L, rolesDto)).isInstanceOf(BusinessException.class);
     }
 
     @Test
@@ -110,7 +117,7 @@ class UtilisateurServiceTest {
         given(utilisateurRepository.save(utilisateurMaj)).willReturn(utilisateurMaj);
 
         // action:
-        UtilisateurDto utilisateur = utilisateurService.mettreAjourUtilisateur(utilisateurDto);
+        UtilisateurDto utilisateur = utilisateurServiceImpl.mettreAjourUtilisateur(utilisateurDto);
 
         // vérification:
         assertThat(utilisateur).isEqualTo(utilisateurDto);

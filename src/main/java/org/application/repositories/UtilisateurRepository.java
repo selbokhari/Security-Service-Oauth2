@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepository extends CrudRepository<UtilisateurEntite, Long> {
+public interface UtilisateurRepository extends CrudRepository<UtilisateurEntite, Long> {
 
     UtilisateurEntite findByLogin(String username);
 
