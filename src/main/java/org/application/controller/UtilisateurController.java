@@ -3,6 +3,7 @@ package org.application.controller;
 import org.application.dto.UtilisateurDto;
 import org.application.service.UtilisateurService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/user")
-public class UserController {
+public class UtilisateurController {
 
     private final UtilisateurService utilisateurService;
 
@@ -31,7 +32,7 @@ public class UserController {
     @PostMapping
     @PreAuthorize("hasAnyAuthority('SCOPE_ADMIN')")
     public ResponseEntity<UtilisateurDto> creerUtilisateur(@RequestBody UtilisateurDto utilisateurDto) {
-        return ResponseEntity.ok(utilisateurService.creerUtilisateur(utilisateurDto));
+        return new ResponseEntity<>(utilisateurService.creerUtilisateur(utilisateurDto), HttpStatus.CREATED);
     }
 
 }

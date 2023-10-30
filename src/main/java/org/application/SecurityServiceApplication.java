@@ -17,7 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Set;
 
-@EnableJpaAuditing
 @SpringBootApplication
 @EnableConfigurationProperties(RsaKeysConfig.class)
 public class SecurityServiceApplication {

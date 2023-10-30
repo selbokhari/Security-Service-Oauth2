@@ -6,7 +6,7 @@ import org.application.entities.RoleEntite;
 import org.application.entities.UtilisateurEntite;
 import org.application.exception.BusinessException.Raison;
 import org.application.exception.BusinessException;
-import org.application.mapper.UserEntiteMapper;
+import org.application.mapper.UtilisateurMapper;
 import org.application.repositories.UtilisateurRepository;
 import org.application.service.RoleService;
 import org.application.service.UtilisateurService;
@@ -30,24 +30,24 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     @Override
     public UtilisateurDto recupererUtilisateurParId(Long id) {
         return utilisateurRepository.findById(id)
-                .map(UserEntiteMapper::mapToUserDto)
+                .map(UtilisateurMapper::mapToUserDto)
                 .orElse(null);
     }
 
     @Override
     public UtilisateurDto creerUtilisateur(UtilisateurDto utilisateurDto) {
-        return Optional.of(UserEntiteMapper.mapToUserEntite(utilisateurDto))
+        return Optional.of(UtilisateurMapper.mapToUserEntite(utilisateurDto))
                 .map(utilisateurRepository::save)
-                .map(UserEntiteMapper::mapToUserDto)
+                .map(UtilisateurMapper::mapToUserDto)
                 .orElse(null);
     }
 
     @Override
     public UtilisateurDto mettreAjourUtilisateur(UtilisateurDto utilisateurDto) {
         utilisateurRepository.findById(utilisateurDto.getUserId()).orElseThrow(() -> new BusinessException(Raison.UTILISATEUR_NON_TROUVEE));
-        return Optional.of(UserEntiteMapper.mapToUserEntite(utilisateurDto))
+        return Optional.of(UtilisateurMapper.mapToUserEntite(utilisateurDto))
                 .map(utilisateurRepository::save)
-                .map(UserEntiteMapper::mapToUserDto)
+                .map(UtilisateurMapper::mapToUserDto)
                 .orElse(null);
     }
 
@@ -76,7 +76,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     @Transactional(propagation = Propagation.REQUIRED)
     public List<UtilisateurDto> recupererTousLesUtilisateurs() {
         return utilisateurRepository.findAll()
-                .stream().map(UserEntiteMapper::mapToUserDto)
+                .stream().map(UtilisateurMapper::mapToUserDto)
                 .toList();
     }
 

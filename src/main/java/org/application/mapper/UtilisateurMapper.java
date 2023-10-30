@@ -3,7 +3,7 @@ package org.application.mapper;
 import org.application.dto.UtilisateurDto;
 import org.application.entities.UtilisateurEntite;
 
-public class UserEntiteMapper {
+public class UtilisateurMapper {
 
     public static UtilisateurEntite mapToUserEntite(UtilisateurDto utilisateurDto) {
         return UtilisateurEntite.builder()
