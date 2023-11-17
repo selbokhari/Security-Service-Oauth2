@@ -1,6 +1,6 @@
 # Security-Service-Oauth2
 
-Cette application met en œuvre `OAuth 2.0` avec `Spring Boot` et `Spring Security`. Voici quelques fonctionnalités et composants inclus :
+Cette application met en œuvre `OAuth 2.0` avec `Spring Boot` et `Spring Security v6`. Voici quelques fonctionnalités et composants inclus :
 
 - **Base de données In Memory H2 :** Utilisée pour stocker les informations nécessaires à l'authentification.
 - **Méthode symétrique de cryptage RSA :** Pour assurer une sécurité robuste dans la gestion des clés et des secrets.
